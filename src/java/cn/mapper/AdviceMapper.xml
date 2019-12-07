@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mapper.AdviceMapper">
+
+    <insert id="insertAdviceInfo">
+        INSERT INTO gp_advice(ip,adviceInfo) VALUE (#{ip} ,#{adviceInfo})
+    </insert>
+
+    <select id="selectAdviceAllInfo" resultType="cn.model.Advice">
+        SELECT * FROM `gp_advice`
+    </select>
+
+</mapper>

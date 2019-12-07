@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>查看用户</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">贴子信息</strong></div>
+        <div class="padding border-bottom">
+            <a class="button border-yellow" id="export"><span class="icon-plus-square-o"></span>导出贴子信息</a>
+        </div>
+    <table class="table table-hover text-center">
+        <tr id="tr_title">
+            <th>编号</th>
+            <th>主题</th>
+            <th>作者</th>
+            <th>类型</th>
+            <th>内容</th>
+            <th>访问数量</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </tr>
+    </table>
+</div>
+</body>
+<script>
+    layui.use('form', function() {
+        var form = layui.form;
+    });
+
+    $(function () {
+
+
+
+    });
+</script>
+</html>

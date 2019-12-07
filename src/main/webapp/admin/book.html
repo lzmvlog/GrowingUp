@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title></title>  
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+</head>
+<body>
+<form method="post" action="">
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">留言管理</strong></div>
+    <div class="padding border-bottom">
+      <ul class="search">
+        <li>
+          <a class="button border-yellow" id="export"><span class="icon-plus-square-o"></span>导出留言信息</a>
+          <button type="button"  class="button border-green" id="checkall"><span class="icon-check"></span> 全选</button>
+          <button type="submit" class="button border-red"><span class="icon-trash-o"></span> 批量删除</button>
+        </li>
+      </ul>
+    </div>
+    <table class="table table-hover text-center">
+      <tr id="tr_title">
+        <th>编号</th>
+        <th>建议信息</th>
+        <th width="120px">操作</th>
+      </tr>      
+<!--      <tr>-->
+<!--        <td colspan="8"><div class="pagelist"> <a href="">上一页</a> <span class="current">1</span><a href="">2</a><a href="">3</a><a href="">下一页</a><a href="">尾页</a> </div></td>-->
+<!--      </tr>-->
+      <tr>
+<!--        <th></th>-->
+<!--        <th></th>-->
+<!--        <th><a href=""><input class="layui-btn layui-btn-normal" type="button" value="编辑"></a><input  style="margin: 0 0 0 8px" class="layui-btn layui-btn-danger" type="button" value="删除"></th>-->
+      </tr>
+    </table>
+  </div>
+</form>
+<script type="text/javascript">
+
+$(function () {
+
+    $.ajax({
+        url : "/GrowingUp/admin/selectAdviceAllInfo",
+        type : "post",
+        data : "",
+        dataType : "json",
+        success : function (data) {
+            for (var i = 0; i < data.length; i++) {
+                $("#tr_title").after("<tr>\n" +
+                        "<th>" + data[i].id +"</th>\n" +
+                        "<th>" + data[i].adviceInfo +"</th>\n" +
+                        "<th><a href='edit.html?id=" + data[i].id + "><input class=\"layui-btn layui-btn-normal\" type=\"button\" value=\"编辑\"></a><input  style=\"margin: 0 0 0 8px\" class=\"layui-btn layui-btn-danger\" type=\"button\" value=\"删除\"></th>\n" +
+                        "</tr>");
+            }
+        },
+        error : function () {
+        }
+    });
+
+  $("#export").click(function () {
+      $.ajax({
+          url : "/GrowingUp/admin/exportAdvice",
+          type : "post",
+          data : "",
+          dataType : "",
+          success : function (data) {
+              var dataJson = JSON.parse(data);
+                  layui.use('layer',function () {
+                    if (dataJson == true){
+                      layer.msg("导出成功",{icon: 1,time:3000});
+                    }else{
+                      layer.msg("导出失败",{icon: 2,time:3000});
+                    }
+              });
+          },
+          error : function () {
+          }
+      });
+  });
+
+});
+</script>
+</body></html>

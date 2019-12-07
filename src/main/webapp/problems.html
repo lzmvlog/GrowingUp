@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发贴</title>
+    <link rel="shortcut icon" href="image/1118130.png">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/allPage.js"></script>
+    <script type="text/javascript" src="ueditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="ueditor.all.js"></script>
+
+    <style>
+        *{
+            font-size: 18px;
+            font-family: 楷体;
+        }
+        .header_li{
+            display: inline-block;
+            margin: 0 15px 0 15px ;
+            cursor: pointer;
+            color: #FCFCFC;
+        }
+        li:hover{
+            color: #0000FF;
+        }
+        #header{
+            padding: 20px 0 20px 0;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div id="header" class="container-fluid">
+    <div class="row">
+        <div class="col-md-4" style="padding: 0 0 0 280px;cursor: pointer; color: #FCFCFC" id="index_title">Grow up together</div>
+        <div class="col-md-7">
+            <ul>
+                <li class="header_li" id="index_ul">首页</li>
+                <li class="header_li" id="knowledge">知识库</li>
+                <li class="header_li" id="article">文章列表</li>
+                <li class="header_li" id="problems">发帖</li>
+                <li class="header_li" id="about">关于我们</li>
+                <li class="header_li" id="leave">留言</li>
+            </ul>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<div id="body" style="margin: 50px 300px 0 300px;">
+    <div class="form-group has-success has-feedback">
+        <label class="control-label" for="inputSuccess2">文章标题</label>
+        <input type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status">
+        <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+        <span id="inputSuccess2Status" class="sr-only">(success)</span>
+    </div>
+
+    <label class="control-label" for="inputSuccess2">文章类型</label>
+    <select class="form-control" name="info">
+        <option>java</option>
+        <option>css</option>
+        <option>javascript</option>
+        <option>jsp</option>
+        <option>jquery</option>
+        <option>mybatis</option>
+        <option>spring</option>
+    </select><br>
+    <!-- 加载编辑器的容器 -->
+    <script id="container" name="content" type="text/plain" style="height:600px;">
+
+    </script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var ue = UE.getEditor('container');
+    </script>
+    <button onclick="getContent()" class="btn btn-info" id="c">发帖</button>
+</div>
+<div id="footer">
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+
+        $("#inputSuccess2").blur(function () {
+            var $inputSuccess2 = $("#inputSuccess2").val();
+            // alert($inputSuccess2);
+            if ($inputSuccess2 == null || $inputSuccess2 == "") {
+                $(this).removeClass("has-success");
+            }
+        });
+
+        $("#c").click(function () {
+            var arr = [];
+            arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+            arr.push("内容为：");
+            arr.push(UE.getEditor('container').getContent());
+            var $postContext = UE.getEditor('container').getContent();
+            var $info = $("[name='info']").val();
+            var $inputSuccess2 = $("#inputSuccess2").val();
+            if ($inputSuccess2 == null || $inputSuccess2 == "") {
+                layui.use('layer',function () {
+                    layer.msg("文章标题不能为空！",{icon: 2})
+                });
+            }else{
+                $.ajax({
+                    url : "/GrowingUp/insertPost",
+                    type : "post",
+                    data : "postContext=" + $postContext + "&info=" + $info + "&title=" + $inputSuccess2,
+                    dataType : "",
+                    success : function (data) {
+                        var dataJson = JSON.parse(data);
+                        layui.use('layer',function () {
+                            if (dataJson == true){
+                                layer.msg("发表成功！")
+                            }else {
+                                layer.msg("请先登录！",{icon : 2},function () {
+                                    location.href = "index.html"
+                                })
+                            }
+                        })
+                    },
+                    error : function () {
+                        alert("系统出错！")
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+</html>

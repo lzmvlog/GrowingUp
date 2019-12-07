@@ -1,0 +1,30 @@
+@charset "utf-8";
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Arial";font-weight:normal}
+:after,:before{box-sizing:inherit}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+/*背景*/
+.bg-blue{background:url("../images/bg_solution.jpg") no-repeat center;background-size:cover}
+.developer-solution-block{position:relative;max-width:none;padding:50px 0;text-align:center;clear:both;margin:0 auto}
+/*大标题*/
+.titleBar .caption{font-size:36px;color:#252b3a;letter-spacing:0;text-align:center;line-height:46px;margin-bottom:10px}
+.descript{margin-bottom:40px;font-size:16px;color:#A0A2A8}
+.developer-solution-block .titleBar{max-width:1200px;margin:0 auto;text-align:center}
+.developer-solution-block .titleBar .caption,.developer-solution-block .titleBar .descript{color:#fff}
+.developer-solution-block .developer-solution{max-width:1180px;margin:0 auto;padding:0 60px;background:none}
+/*左边分类*/
+.developer-solution .solution-tab{font-size:18px;color:#ffffff;line-height:28px;text-align:center;display:inline-block;width:300px;margin-right:100px;float:left}
+.developer-solution .solution-tab ul{padding:20px 0;background:rgba(255,255,255,0.20);opacity:1;box-shadow:-18px 6px 8px 0 rgba(0,0,0,0.20);border-radius:2px;width:260px}
+.solution-tab ul li{padding:20px 30px;width:260px;text-align:left;color:#ffffff}
+.solution-tab ul li.active{width:300px;background:#f66f6a;box-shadow:0 8px 16px 0 rgba(227,24,31,0.30);border-radius:2px;margin-left:-20px;padding-left:50px}
+/*右边内容标题详情*/
+.developer-solution .solution-detail{width:calc(100% - 400px);display:inline-block;vertical-align:top;height:270px;padding-top:50px;text-align:left}
+.developer-solution .solution-detail ul li{display:none}
+.developer-solution .solution-detail ul li.active{display:block}
+.solution-detail li .title{font-size:22px;color:#ffffff;line-height:28px;text-align:left;margin-bottom:14px}
+.solution-detail li .detail{font-size:14px;color:#ffffff;line-height:22px;text-align:left}
+/*产看更多按钮*/
+.solution-detail li .more-btn{display:inline-block;position:relative;border:1px solid #ffffff;border-radius:2px;font-size:14px;color:#ffffff;text-align:center;padding:8px 45px 8px 30px;line-height:22px;margin-top:30px}
+.solution-detail li .more-btn:before{content:"";position:absolute;right:26px;top:14px;width:13px;height:9px;display:inline-block;background:url("../images/more.png") no-repeat center}
+.solution-detail li .more-btn:hover{color:#fa6f66;border:1px solid #fa6f66}
+.solution-detail li .more-btn:hover:before{background:url("../images/more_active.png") no-repeat center;right:20px;-webkit-transition:all .3s;-moz-transition:all .3s;-ms-transition:all .3s;-o-transition:all .3s;transition:all .3s}

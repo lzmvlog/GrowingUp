@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>一起成长</title>
+    <link rel="shortcut icon" href="image/1118130.png">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script src="bootstrap/js/jquery.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/style_body.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/fonts.css">
+    <script type="text/javascript" src="js/allPage.js"></script>
+
+    <style>
+
+        *{
+            font-size: 18px;
+            font-family: 楷体;
+        }
+        .header_li{
+            display: inline-block;
+            margin: 0 15px 0 15px ;
+            cursor: pointer;
+            color: #FCFCFC;
+        }
+        li:hover{
+            color: #0000FF;
+        }
+        #header{
+            padding: 20px 0 20px 0;
+            background-color: #000000;
+        }
+        .o{
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="header" class="container-fluid">
+        <div class="row">
+            <div class="col-md-4" style="padding: 0 0 0 280px;cursor: pointer; color: #FCFCFC" id="index_title">Grow up together</div>
+            <div class="col-md-7">
+                <ul>
+                    <li class="header_li" id="index_ul">首页</li>
+                    <li class="header_li" id="knowledge">知识库</li>
+                    <li class="header_li" id="article">文章列表</li>
+                    <li class="header_li" id="problems">发帖</li>
+                    <li class="header_li" id="about">关于我们</li>
+                    <li class="header_li" id="leave">留言</li>
+                </ul>
+            </div>
+            <div class="col-md-1">
+                <ul>
+                    <li id="login" class="header_li">LOGIN</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="body">
+        <div class="bg-blue">
+            <div class="developer-solution-block">
+                <div class="titleBar">
+                    <h3 class="caption">优秀精华帖</h3>
+                    <p class="descript">展示最近的优秀精华帖，给大家学习和研究</p>
+                </div>
+                <div class="developer-solution">
+                    <div class="solution-tab">
+                        <ul>
+                            <li class="active o" data-item="item01" >软件实训解决方案</li>
+                            <li class="o" data-item="item02" >游戏开发解决方案</li>
+                            <li class="o" data-item="item03">电商双交付解决方案</li>
+                        </ul>
+                    </div>
+                    <div class="solution-detail">
+                        <ul>
+                            <li class="item01 active">
+                                <div class="title">
+                                    软件实训解决方案
+                                </div>
+                                <p class="detail">
+                                    云端一站式软件教学与实践平台，为学生提供企业级的软件项目开发实践体验，方便老师开展软件实训教学、全面掌握学生软件开发能力
+                                </p>
+                                <a class="more-btn " href="#">查看更多</a>
+                            </li>
+                            <li class="item02">
+                                <div class="title">
+                                    游戏开发解决方案
+                                </div>
+                                <p class="detail">
+                                    云主机一站式游戏研发平台，贯穿游戏开发、测试和运维的产品全生命周期
+                                </p>
+                                <a class="more-btn " href="#">查看更多</a>
+                            </li>
+                            <li class="item03">
+                                <div class="title">
+                                    电商双交付解决方案
+                                </div>
+                                <p class="detail">
+                                    基于双交付理念，在向客户交付电商应用时，同步交付全套云上环境
+                                </p>
+                                <a class="more-btn" href="#">查看更多</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="float: left;padding-top: 30px;text-align: center;width: 100%;font-weight: bolder;color: #ff6600;">
+                <p id="hitokoto">获取中...</p>
+            </div>
+            <div>
+                <main>
+                    <ul class="ul items" id="show_info">
+                    </ul>
+                </main>
+            </div>
+        </div><hr>
+    </div>
+    <div id="footer">
+        <div class="row" style="text-align: center;background-color:#3b4348;color: #FFFFFF ">
+            <div class="col-md-12" >版权声明 &copy;一起成长</div>
+        </div>
+    </div>
+</body>
+<!-- 现代写法，推荐 -->
+<!-- 兼容低版本浏览器 (包括 IE)，可移除 -->
+<script src="https://cdn.jsdelivr.net/npm/bluebird@3/js/browser/bluebird.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@2.0.3/fetch.min.js"></script>
+<!--End-->
+<script>
+    fetch('https://v1.hitokoto.cn')
+        .then(function (res){
+            return res.json();
+        })
+        .then(function (data) {
+            var hitokoto = document.getElementById('hitokoto');
+            hitokoto.innerText = data.hitokoto;
+        })
+        .catch(function (err) {
+            console.error(err);
+        })
+</script>
+<!-- 新 API 方法， 十分简洁 -->
+<script src="https://v1.hitokoto.cn/?encode=js&select=%23hitokoto" defer></script>
+<script src="https://v1.hitokoto.cn/?c=f&encode=text " charset="utf-8"></script>
+<script>
+     $(function () {
+
+         $('.developer-solution .solution-tab ul li').each(function() {
+            $(this).hover(function() {
+                $('.developer-solution .solution-tab ul li').removeClass('active');
+                $('.developer-solution .solution-detail ul li').removeClass('active');
+                $(this).addClass('active');
+                $('.' + $(this).attr('data-item')).addClass('active');
+            });
+        });
+
+         $.ajax({
+             url : "/GrowingUp/selectUserInfo",
+             type : "post",
+             data : "",
+             success  :  function(userJson) {
+                 var userParse = JSON.parse(userJson);
+                 if( userParse != "undefined" && userParse != null){
+                     $("#login").html(userParse["name"]);
+                     $("#login").unbind();
+                     $("#login").bind("click",function(){
+                         location.href = "info.html";
+                     });
+                     layui.use('layer',function (){
+                         layer.msg("欢迎会员："+ userParse["name"]);
+                     });
+                 }
+             },
+            error : function () {
+                $("#login").text("LOGIN");
+            }
+        });
+
+        $.ajax({
+            url : "/GrowingUp/selectPostInfo",
+            type : "post",
+            data : "",
+            dataType: "json",
+            success  :  function(postInfo) {
+                for (var i = 0; i < postInfo.length; i++) {
+                    $("#show_info").append(
+                        "<li><figure class=\"effect-jazz\">"
+                        + "<img src='image/" + postInfo[i].srcname + "'><figcaption><h2>"
+                        + postInfo[i].title + "<br/>"+ "<span>"
+                        + postInfo[i].info +"</span>"
+                        + "</h2><a href='/GrowingUp/selectPostInfoFromOne?postId=" + postInfo[i].id + "'>查看</a>"
+                        + "</figcaption></figure></li>"
+                    );
+                }
+            },
+            error : function () {
+            }
+        });
+
+
+    });
+</script>
+</html>

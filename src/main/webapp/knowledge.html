@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>关于我们</title>
+    <link rel="shortcut icon" href="image/1118130.png">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/allPage.js"></script>
+
+    <style>
+        *{
+            font-size: 18px;
+            font-family: 楷体;
+        }
+        .header_li{
+            display: inline-block;
+            margin: 0 15px 0 15px ;
+            cursor: pointer;
+            color: #FCFCFC;
+        }
+        li:hover{
+            color: #0000FF;
+        }
+        #header{
+            padding: 20px 0 20px 0;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div id="header" class="container-fluid">
+    <div class="row">
+        <div class="col-md-4" style="padding: 0 0 0 280px;cursor: pointer; color: #FCFCFC" id="index_title">Grow up together</div>
+        <div class="col-md-7">
+            <ul>
+                <li class="header_li" id="index_ul">首页</li>
+                <li class="header_li" id="knowledge">知识库</li>
+                <li class="header_li" id="article">文章列表</li>
+                <li class="header_li" id="problems">发帖</li>
+                <li class="header_li" id="about">关于我们</li>
+                <li class="header_li" id="leave">留言</li>
+            </ul>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<div id="body" style="margin: 50px 300px 0 300px; overflow:hidden">
+    <div align="center">
+        <ul class="breadcrumb" contenteditable="fasle" id="main_ul"><!--class="active"-->
+            <li><a href="javascript:void(0)">JAVA</a> <span class="divider"></span></li>
+            <li><a href="javascript:void(0)">CSS</a> <span class="divider"></span></li>
+            <li><a href="javascript:void(0)">JAVASCRIPT</a> <span class="divider"></span></li>
+            <li><a href="javascript:void(0)">JSP</a> <span class="divider"></span></li>
+            <li><a href="javascript:void(0)">JQUERY</a> <span class="divider"></span></li>
+            <li><a href="javascript:void(0)">MYBATIS</a> <span class="divider"></span></li>
+            <li><a href="javascript:void(0)">SPRING</a> <span class="divider"></span></li>
+        </ul>
+    </div>
+    <div id="context_main">
+<!--        <div class="hero-unit" contenteditable="false" >-->
+<!--            <h1>Hello, world!</h1>-->
+<!--            <p>这是一个可视化布局模板, 你可以点击模板里的文字进行修改, 也可以通过点击弹出的编辑框进行富文本修改. 拖动区块能实现排序.</p>-->
+<!--            <p><a class="btn btn-primary" href="#" >参看更多 &raquo;</a></p>-->
+        <!--"<p>"+ data[i].context.substr(0,100)+ "</p>\n" +-->
+<!--        </div>-->
+    </div>
+</div>
+
+<div id="footer">
+
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+
+        $.ajax({
+            url : "/GrowingUp/selectPostAllByType",
+            type : "get",
+            data : "info=java",
+            dataType : "json",
+            success : function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#context_main").append("<div class=\\\"hero-unit\\\" contenteditable=\"false\" >\n"+
+                        "<h1>"+ data[i].title +"</h1>\n" +
+                        "<p><a class=\"btn btn-primary\" href='/GrowingUp/selectPostInfoFromOne?postId=" + data[i].id +
+                        "'>参看更多 &raquo;</a></p>\n<br>" +
+                        "</div>");
+                }
+            },
+            error : function () {
+            }
+        });
+
+        $("#main_ul a").click(function () {
+            $("#context_main").empty();
+            // toLowerCase() 转换大小写
+            var $a_text = $(this).text().toLowerCase();
+            $.ajax({
+                url : "/GrowingUp/selectPostAllByType",
+                type : "get",
+                data : "info="+ $a_text,
+                dataType : "json",
+                success : function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        $("#context_main").append("<div class=\\\"hero-unit\\\" contenteditable=\"false\" >\n"+
+                            "<h1>"+ data[i].title +"</h1>\n" +
+                            // "<p>"+ data[i].context.substr(0,50)+ "</p>\n" +
+                            "<p><a class=\"btn btn-primary\" href='/GrowingUp/selectPostInfoFromOne?postId=" + data[i].id +
+                            "'>参看更多 &raquo;</a></p>\n<br>" +
+                            "</div>");
+                    }
+                },
+                error : function () {
+                }
+            });
+        })
+
+    });
+</script>
+</html>

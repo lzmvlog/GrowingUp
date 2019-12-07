@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="shortcut icon" href="image/1118130.png">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/allPage.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <style>
+        *{
+            font-size: 18px;
+            font-family: 楷体;
+        }
+        .header_li{
+            display: inline-block;
+            margin: 0 15px 0 15px ;
+            cursor: pointer;
+            color: #FCFCFC;
+        }
+        li:hover{
+            color: #0000FF;
+        }
+        #header{
+            padding: 20px 0 20px 0;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div id="header" class="container-fluid">
+        <div class="row">
+            <div class="col-md-4" style="padding: 0 0 0 280px;cursor: pointer; color: #FCFCFC" id="index_title">Grow up together</div>
+            <div class="col-md-7">
+                <ul>
+                    <li class="header_li" id="index_ul">首页</li>
+                    <li class="header_li" id="knowledge">知识库</li>
+                    <li class="header_li" id="article">文章列表</li>
+                    <li class="header_li" id="problems">发帖</li>
+                    <li class="header_li"  id="about">关于我们</li>
+                    <li class="header_li" id="leave">留言</li>
+                </ul>
+            </div>
+            <div class="col-md-1">
+            </div>
+        </div>
+    </div>
+    <div id="body" style="margin: 0 300px 0 300px;">
+        <div class="row">
+            <input type="type" id="post_id" hidden value="">
+            <div class="col-md-8">
+                <h2 contenteditable="false" id="title" style="display: inline-block">标题</h2>&nbsp;
+                <code id="code_title"></code>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>阅读数：</span><span id="count"></span>
+            </div>
+            <div class="col-md-1" style="margin: 23px 0 0 0;color: blue;cursor: pointer" ><a id="author"></a></div>
+            <div class="col-md-3" style="margin: 23px 0 0 0;padding: 0 0 0 200px " id="time"></div>
+        </div>
+        <div id="code" class=""></div>
+        <br><br>
+        <form  method="post" action="">
+            <fieldset>
+                <legend>评论</legend> <!--<label>建议</label>-->
+                <textarea id="comments" style="height: 200px;width: 1200px;resize:none"></textarea>
+                <span class="help-block">这里填写评论信息.</span><button type="button" class="btn btn-info" id="advice_but">评论/发表</button>
+            </fieldset>
+        </form>
+        <br><br>
+        <div id="comments_header">
+<!--            <h2 contenteditable="false" style="display: inline-block;" id="">评论人名称</h2>&nbsp;&nbsp;&nbsp;<span id="comments_time">2019/4/28</span>-->
+<!--             <p contenteditable="false" id="commentInfo">本可视化布局程序在HTML5浏览器上运行更加完美, 能实现自动本地化保存,即使关闭了网页, 下一次打开仍然能恢复上一次的操作.这里展示的是评论的信息</p>-->
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+
+        $.ajax({
+            url : "/GrowingUp/selectPost",
+            type : "post",
+            data : "",
+            dataType : "json",
+            success  :  function(postJson) {
+                $("#post_id").val(postJson.id)
+                $("title").text(postJson.title)
+                $("#count").html(postJson.count)
+                $("#author").html(postJson.user.name )
+                $("#title").html(postJson.title);
+                $("#code_title").html(postJson.info)
+                $("#time").html(postJson.time);
+                $("#code").html(postJson.context);
+
+                var $postId = $("#post_id").val();
+                $.ajax({
+                    url : "/GrowingUp/updatePostCount",
+                    type : "post",
+                    data : "postId=" + $postId,
+                    dataType : "",
+                    success : function (data) {
+                    },
+                    error : function () {
+                    }
+                });
+
+                $.ajax({
+                    url : "/GrowingUp/selectCommentsByOne",
+                    type : "post",
+                    data : "postId=" + $postId,
+                    dataType : "json",
+                    success : function (dataInfo) {
+                        for (var i = 0; i <dataInfo.length; i++) {
+                            $("#comments_header").append("<h2 contenteditable=\"false\" style=\"display: inline-block;\" id=\"\">"+dataInfo[i].user.name
+                                +"</h2>&nbsp;&nbsp;&nbsp;<span id=\"comments_time\">"+dataInfo[i].time
+                                +"</span>\n" +"<p contenteditable=\"false\" id=\"commentInfo\" class=\"bg-primary\">"
+                                +dataInfo[i].commentInfo+"</p>\n");
+                        }
+                    },
+                    error : function () {
+                    }
+                });
+
+            },
+                error : function () {
+            }
+        });
+
+        $("#advice_but").click(function () {
+            var $postId = $("#post_id").val();
+            var $comments = $("#comments").val();
+            if ($comments == null || $comments ==""){
+                layui.use('layer',function () {
+                    layer.msg("请发表你的看法",{icon: 2})
+                });
+            }else{
+                $.ajax({
+                    url : "/GrowingUp/insertNewComments",
+                    type : "post",
+                    data : "comments=" + $comments + "&postId=" + $postId ,
+                    dataType : "",
+                    success : function (data) {
+                        var dataParse = JSON.parse(data);
+                        layui.use('layer',function () {
+                            if (dataParse == true){
+                                layer.msg("评论成功",function () {
+                                    $("#comments").val("");
+                                    $.ajax({
+                                        url : "/GrowingUp/selectCommentsByOne",
+                                        type : "post",
+                                        data : "postId=" + $postId,
+                                        dataType : "",
+                                        success : function (dataInfo) {
+                                            for (var i = 0; i <dataInfo.length; i++) {
+                                                $("#comments_header").append("<h2 contenteditable=\"false\" style=\"display: inline-block;\" id=\"\">"+dataInfo[i].user.name
+                                                    +"</h2>&nbsp;&nbsp;&nbsp;<span id=\"comments_time\">"+dataInfo[i].time
+                                                    +"</span>\n" +"<p contenteditable=\"false\" id=\"commentInfo\" class=\"bg-primary\">"
+                                                    +dataInfo[i].commentInfo+"</p>\n");
+                                            }
+                                        },
+                                        error : function () {
+                                        }
+                                    });
+                                });
+                            }else {
+                                layer.msg("请先登录",{ icon : 2 },function () {
+                                    location.href ="index.html";
+                                });
+                            }
+                        })
+                    },
+                    error : function () {
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+</html>

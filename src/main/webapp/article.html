@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章列表</title>
+    <link rel="shortcut icon" href="image/1118130.png">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+<!--    <script src="bootstrap/js/jquery.js"></script>-->
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/allPage.js"></script>
+    <style>
+        *{
+            font-size: 18px;
+            font-family: 楷体;
+        }
+        .header_li{
+            display: inline-block;
+            margin: 0 15px 0 15px ;
+            cursor: pointer;
+            color: #FCFCFC;
+        }
+        li:hover{
+            color: #0000FF;
+        }
+        #header{
+            padding: 20px 0 20px 0;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div id="header" class="container-fluid">
+    <div class="row">
+        <div class="col-md-4" style="padding: 0 0 0 280px;cursor: pointer; color: #FCFCFC" id="index_title">Grow up together</div>
+        <div class="col-md-7">
+            <ul>
+                <li class="header_li" id="index_ul">首页</li>
+                <li class="header_li" id="knowledge">知识库</li>
+                <li class="header_li" id="article">文章列表</li>
+                <li class="header_li" id="problems">发帖</li>
+                <li class="header_li" id="about">关于我们</li>
+                <li class="header_li" id="leave">留言</li>
+            </ul>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+</div>
+<div id="body" style="margin: 50px 300px 0 300px;">
+    <div id="context">
+<!--        <h2 contenteditable="false">标题</h2>-->
+<!--        <button type="button" class="btn btn-info"><a class="btn" contenteditable="false" href="">查看更多&raquo;</a></button>-->
+    </div>
+
+    <nav style="text-align: center;">
+        <ul class="pagination" id="pagination">
+<!--            <li><a href="javascript:void(0)" id="up">&laquo;</a></li>-->
+<!--            <li><a href="javascript:void(0)">1</a></li>-->
+<!--            <li><a href="javascript:void(0)">2</a></li>-->
+<!--            <li><a href="javascript:void(0)" id="next">&raquo;</a></li>-->
+        </ul>
+    </nav>
+</div>
+<div id="footer">
+
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+
+        // 设置一个总页数
+        var $pageCount = 0;
+        var $postAllCount = 0;
+        $.ajax({
+            url : "/GrowingUp/pagination",
+            type : "post",
+            data : "",
+            dataType : "Json",
+            success : function (data) {
+                $postAllCount = data.length ;
+                $("#pagination").append("<li><a href=\"javascript:void(0)\" id=\"up\">&laquo;</a></li>");
+                for (var i = 0; i < data.length ; i++) {
+                    $("#pagination").append("<li><a href=\"javascript:void(0)\" class=\"page\">"+data[i]+"</a></li>");
+                }
+                $("#pagination").append("<li><a href=\"javascript:void(0)\" id=\"next\">&raquo;</a></li>");
+            },
+            error : function () {
+            }
+        });
+
+        // var $postIndex = 0;
+        $("#next").live("click",function () {
+            $pageCount = $pageCount + 1;
+            if ($pageCount > $postAllCount - 1) {
+                layui.use('layer',function (){
+                    $("#next").css("tabindex","-1");
+                    // layer.msg("没有数据了！");
+                });
+                $pageCount = $pageCount - 1;
+            }else {
+                $.ajax({
+                    url : "/GrowingUp/jumpPage",
+                    type : "post",
+                    data : "postCount=" + $pageCount,
+                    dataType : "json",
+                    success : function (data) {
+                        $("#context").empty();
+                        for (var i = 0; i < data.length; i++) {
+                            $("#context").append("<h2 contenteditable=\"false\">"+data[i].title+"</h2>\n" +
+                                // "<p contenteditable=\"false\">"+data[i].context.substr(0,100)+"</p>\n" +
+                                "<button type=\"button\" class=\"btn btn-info\"><a class=\"btn\" contenteditable=\"false\" href='/GrowingUp/selectPostInfoFromOne?postId=" + data[i].id +
+                                "'>查看更多&raquo;</a></button>");
+                        }
+                    },
+                    error : function () {
+                    }
+                });
+            }
+        });
+
+        $("#up").live("click",function () {
+            $pageCount = $pageCount - 1;
+            if ($pageCount  < 0) {
+                layui.use('layer', function () {
+                    $("#up").css("tabindex","-1");
+                    // layer.msg("没有数据了！");
+                });
+                $pageCount = $pageCount + 1;
+            }else {
+                $.ajax({
+                    url : "/GrowingUp/jumpPage",
+                    type : "post",
+                    data : "postCount=" + $pageCount,
+                    dataType : "json",
+                    success : function (data) {
+                        $("#context").empty();
+                        for (var i = 0; i < data.length; i++) {
+                            $("#context").append("<h2 contenteditable=\"false\">"+data[i].title+"</h2>\n" +
+                                // "<p contenteditable=\"false\">"+data[i].context.substr(0,100)+"</p>\n" +
+                                "<button type=\"button\" class=\"btn btn-info\"><a class=\"btn\" contenteditable=\"false\" href='/GrowingUp/selectPostInfoFromOne?postId=" + data[i].id +
+                                "'>查看更多&raquo;</a></button>");
+                        }
+
+                    },
+                    error : function () {
+                    }
+                });
+            }
+        });
+
+        $(".page").live("click",function () {
+            $pageCount = parseInt($(this).text()) - 1;
+            $.ajax({
+                url : "/GrowingUp/jumpPage",
+                type : "post",
+                data : "postCount=" + $pageCount,
+                dataType : "json",
+                success : function (data) {
+                    $("#context").empty();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#context").append("<h2 contenteditable=\"false\">"+data[i].title+"</h2>\n" +
+                            // "<p contenteditable=\"false\">"+data[i].context.substr(0,100)+"</p>\n" +
+                            "<button type=\"button\" class=\"btn btn-info\"><a class=\"btn\" contenteditable=\"false\" href='/GrowingUp/selectPostInfoFromOne?postId=" + data[i].id +
+                            "'>查看更多&raquo;</a></button>");
+                    }
+                },
+                error : function () {
+                }
+            });
+        });
+
+        $.ajax({
+            url : "/GrowingUp/selectPostAllInfo",
+            type : "post",
+            data : "",
+            dataType : "json",
+            success : function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    $("#context").append("<h2 contenteditable=\"false\">"+data[i].title+"</h2>\n" +
+                        // "<p contenteditable=\"false\">"+data[i].context.substr(0,100)+"</p>\n" +
+                        "<button type=\"button\" class=\"btn btn-info\"><a class=\"btn\" contenteditable=\"false\" href='/GrowingUp/selectPostInfoFromOne?postId=" + data[i].id +
+                        "'>查看更多&raquo;</a></button>");
+                }
+            },
+            error : function () {
+            }
+        });
+
+        // $("#advice_but").click(function () {
+        //     var $advice = $("#advice").val();
+        //     if ($advice == null && $advice == "") {
+        //         layui.use('layer',function () {
+        //             layer.msg("建议的内容不能为空", {icon: 1, time: 3000});
+        //         });
+        //         return ;
+        //     }else{
+        //         $.ajax({
+        //             url : "/GrowingUp/writerAdvice",
+        //             type : "post",
+        //             data : "advice=" + $advice,
+        //             dataType : "text",
+        //             success : function (data) {
+        //                 var dataJson = JSON.parse(data);
+        //                 if (dataJson == true){
+        //                     layui.use('layer',function () {
+        //                         layer.msg("我们已收到你的建议，将在以后改进，谢谢你提出的建议", {icon: 1, time: 4000}, function () {
+        //                             location.href = "index.html";
+        //                         });
+        //                     })
+        //                 }
+        //             },
+        //             error : function () {
+        //                 alert("出错了")
+        //             }
+        //         });
+        //     }
+        //     return true;
+        // });
+
+    });
+</script>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>关于我们</title>
+    <link rel="shortcut icon" href="image/1118130.png">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+    <script src="bootstrap/js/jquery.js"></script>
+    <script src="bootstrap/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <script type="text/javascript" src="js/allPage.js"></script>
+    <style>
+        *{
+            font-size: 18px;
+            font-family: 楷体;
+        }
+        .header_li{
+            display: inline-block;
+            margin: 0 15px 0 15px ;
+            cursor: pointer;
+            color: #FCFCFC;
+        }
+        li:hover{
+            color: #0000FF;
+        }
+        #header{
+            padding: 20px 0 20px 0;
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+<div id="header" class="container-fluid">
+    <div class="row">
+        <div class="col-md-4" style="padding: 0 0 0 280px;cursor: pointer; color: #FCFCFC" id="index_title">Grow up together</div>
+        <div class="col-md-7">
+            <ul>
+                <li class="header_li" id="index_ul">首页</li>
+                <li class="header_li" id="knowledge">知识库</li>
+                <li class="header_li" id="article">文章列表</li>
+                <li class="header_li" id="problems">发帖</li>
+                <li class="header_li" id="about">关于我们</li>
+                <li class="header_li" id="leave">留言</li>
+            </ul>
+        </div>
+        <div class="col-md-1">
+        </div>
+    </div>
+</div>
+<div id="body" style="margin: 50px 300px 0 300px;">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <dl>
+                    <dt>
+                        名称：一起成长
+                    </dt>
+                    <dd>
+                        希望和大家一起成长
+                    </dd>
+                    <dt>
+                        目的：
+                    </dt>
+                    <dd>
+                        为想要学习的<code>programmer</code>提供好的学习环境以及快速查找自己需要的资料
+                    </dd>
+                </dl>
+                <br>
+                <br>
+                <blockquote>
+                    <p>
+                        &nbsp;&nbsp;教学必须从学习者已有的经验开始。
+                    </p><small>—<cite> &nbsp;&nbsp;&nbsp;杜威</cite></small>
+                </blockquote>
+                <br>
+                <br>
+                <form id="" method="post" action="">
+                    <fieldset>
+                        <legend>建议</legend> <!--<label>建议</label>-->
+                        <textarea id="advice" style="height: 300px;width: 900px;resize:none"></textarea>
+                        <span class="help-block">这里填写建议信息.</span><button type="button" class="btn btn-success" id="advice_but">提交</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="footer">
+
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+
+        $("#advice_but").click(function () {
+            var $advice = $("#advice").val();
+            if ($advice == null || $advice == "") {
+                layui.use('layer',function () {
+                    layer.msg("建议的内容不能为空", {icon: 1, time: 3000});
+                });
+            }else{
+                $.ajax({
+                    url : "/GrowingUp/writerAdvice",
+                    type : "post",
+                    data : "advice=" + $advice,
+                    dataType : "text",
+                    success : function (data) {
+                        var dataJson = JSON.parse(data);
+                        if (dataJson == true){
+                            layui.use('layer',function () {
+                                layer.msg("我们以收到你的建议，将在以后改进，谢谢你提出的建议", {icon: 1, time: 4000}, function () {
+                                    location.href = "index.html";
+                                });
+                            })
+                        }
+                    },
+                    error : function () {
+                        alert("出错了")
+                    }
+                });
+            }
+        });
+
+    });
+</script>
+</html>

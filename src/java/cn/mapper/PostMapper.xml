@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mapper.PostMapper">
+
+    <select id="selectPostInfo" resultType="cn.model.Post">
+        SELECT `id`,`title`,`srcname`,`info` FROM `gp_post` ORDER BY `count` DESC LIMIT 0,6
+    </select>
+
+    <resultMap id="selectPost" type="cn.model.Post">
+        <id  property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="info" column="info"/>
+        <result property="srcname" column="srcname"/>
+        <result property="context" column="context"/>
+        <result property="time" column="time"/>
+        <result property="count" column="count"/>
+        <association property="user" javaType="cn.model.User">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="email" column="email"/>
+            <result property="password" column="password"/>
+        </association>
+    </resultMap>
+
+    <select id="selectPostFromId" resultMap="selectPost">
+        SELECT p.`id`,p.`title`,p.`srcname`,p.`info`,p.`context`,p.`count`,p.`time`,u.`name` FROM `gp_post`  p
+        INNER JOIN `gp_user` u ON u.`id` = p.`author`
+        WHERE p.id = #{id}
+    </select>
+
+    <select id="selectPostAllByType" resultType="cn.model.Post">
+         SELECT * FROM `gp_post` where info= #{info}
+    </select>
+
+    <update id="updatePostCount">
+        UPDATE `gp_post` SET  `count`=`count`+1  WHERE id = #{id}
+    </update>
+
+    <select id="selectPostAllInfo" resultMap="selectPost">
+        SELECT  * FROM gp_post
+    </select>
+
+    <select id="postPagination" resultType="cn.model.Post">
+        SELECT `id`,`title`,`srcname`,`info` FROM `gp_post`  LIMIT #{currPage},5
+    </select>
+
+    <select id="selectPostCount" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM `gp_post`
+    </select>
+
+    <select id="selectPostPagination" resultType="cn.model.Post">
+         SELECT `id`,`title`,`srcname`,`info` FROM `gp_post` LIMIT 0,5
+    </select>
+
+    <insert id="insertPost">
+        INSERT INTO `gp_post`(`title`,`author`,`info`,`context`,`time`)
+        VALUE(#{title},#{author},#{info},#{context},#{time})
+    </insert>
+
+</mapper>

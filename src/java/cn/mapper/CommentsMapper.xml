@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mapper.CommentsMapper">
+
+    <insert id="insertNewComments">
+        INSERT INTO `postcomments`(`postId`,`time`,`userId`,`commentInfo`)
+        VALUE (#{postId},#{time},#{userId},#{commentInfo})
+    </insert>
+
+    <resultMap id="selectPostId" type="cn.model.Comments">
+        <id property="id" column="id"/>
+        <result property="postId" column="postId"/>
+        <result property="userId" column="userId"/>
+        <result property="time" column="time" />
+        <result property="commentInfo" column="commentInfo" />
+        <association property="user" javaType="cn.model.User">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="email" column="email"/>
+            <result property="password" column="password"/>
+        </association>
+    </resultMap>
+
+    <select id="selectCommentsByOne" resultMap="selectPostId" >
+        SELECT p.`id`,p.`postId`,p.`time`,p.`userId`,p.`commentInfo`,u.`name` FROM `postcomments` p
+        INNER JOIN `gp_user` u ON p.`userId` = u.`id`
+        WHERE p.`postId` = #{postId}
+    </select>
+
+</mapper>

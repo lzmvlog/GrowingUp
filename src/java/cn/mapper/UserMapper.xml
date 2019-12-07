@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.mapper.UserMapper">
+
+    <insert id="userRegistered">
+        insert into gp_user(name,email,password) value (#{name},#{email},#{password})
+    </insert>
+
+    <update id="updateUserPassWord">
+        UPDATE `gp_user` SET `password` = #{password} WHERE `email` = #{email}
+    </update>
+
+    <update id="updateUserInfoById">
+        UPDATE `gp_user` SET `name`=#{name},`email`=#{email},`password` =#{password} WHERE id = #{id}
+    </update>
+
+    <select id="userLogin" resultType="java.lang.Integer">
+       select count(1) from gp_user where email = #{email} and password = #{password}
+    </select>
+
+    <select id="selectUserNameFromUserEmail" resultType="cn.model.User">
+      select * from gp_user where email = #{email}
+    </select>
+
+    <select id="selectUserNameFromPostId" resultType="cn.model.User" >
+        SELECT u.`name` FROM `gp_post` p
+        INNER JOIN `gp_user` u ON u.`id` = p.`author`
+        WHERE p.id = #{id}
+    </select>
+
+    <select id="selectUserEmailOnly" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM gp_user WHERE `email` = #{email}
+    </select>
+
+    <select id="selectUserNameByUserId" resultType="cn.model.User">
+        SELECT `name` FROM `gp_user` WHERE `id` = #{id}
+    </select>
+
+    <select id="selectUserAllInfo" resultType="cn.model.User">
+        SELECT * FROM `gp_user` ORDER BY id DESC
+    </select>
+
+    <select id="selectUserInfoById" resultType="cn.model.User">
+        SELECT * FROM `gp_user` WHERE id = #{id}
+    </select>
+
+    <select id="selectUserIdByEmail" resultType="java.lang.Integer">
+        select id from `gp_user` where `email` = #{email}
+    </select>
+
+    <delete id="deleteUserByOne">
+        DELETE  FROM `gp_user` WHERE `id` = #{id}
+    </delete>
+
+</mapper>
